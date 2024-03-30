@@ -1,5 +1,6 @@
 package com.joaovictor.workshopmongo.controller;
 
+import DTO.UserDTO;
 import com.joaovictor.workshopmongo.domain.User;
 import com.joaovictor.workshopmongo.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,6 +11,7 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @RestController
 public class UserController {
@@ -17,8 +19,9 @@ public class UserController {
     private UserService service;
 
     @GetMapping("/users")
-    public ResponseEntity<List<User>> findAll(){
+    public ResponseEntity<List<UserDTO>> findAll(){
         List<User> list = service.findAll();
-        return ResponseEntity.ok().body(list);
+        List<UserDTO> listDto = list.stream().map(x -> new UserDTO(x)).collect(Collectors.toList());
+        return ResponseEntity.ok().body(listDto);
     }
 }
